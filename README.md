@@ -33,5 +33,5 @@ services:
     volumes:
       - /SOURCE-FOLDER-TO-SYNC:/source:ro
       - /DESTINATION-FOLDER-TO-SYNC:/target
-    image: weikinhuang/rync-backup:latest
+    image: renedis/rync-backup:latest
 ```
