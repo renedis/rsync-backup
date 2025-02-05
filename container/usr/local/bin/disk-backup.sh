@@ -31,11 +31,11 @@ if [[ "${SOURCE_DIR}" == /* ]] && [[ ! -d "${SOURCE_DIR}" ]]; then
   exit 1
 fi
 
-TIMESTAMP="$(date +%d-%m-%Y-%H.%M)"
+TIMESTAMP="$(date +%d-%m-%Y_%H.%M)"
 TARGET_DIR_PATH="${TARGET_DIR/%\//}"
-COMPLETE_TARGET_DIR="${TARGET_DIR_PATH}.backup_${TIMESTAMP}"
-INCOMPLETE_TARGET_DIR="${TARGET_DIR_PATH}.incomplete"
-CURRENT_TARGET_DIR="${TARGET_DIR_PATH}.current"
+COMPLETE_TARGET_DIR="${TARGET_DIR_PATH}${TIMESTAMP}"
+INCOMPLETE_TARGET_DIR="${TARGET_DIR_PATH}incomplete"
+CURRENT_TARGET_DIR="${TARGET_DIR_PATH}current"
 
 # this is not targeted as a reusable container
 SSH_KEYFILE=""
