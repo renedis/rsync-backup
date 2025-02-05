@@ -32,7 +32,7 @@ if [[ "${SOURCE_DIR}" == /* ]] && [[ ! -d "${SOURCE_DIR}" ]]; then
 fi
 
 TIMESTAMP="$(date +%d-%m-%Y_%H.%M)"
-TARGET_DIR_PATH="${TARGET_DIR/%\//}"
+TARGET_DIR_PATH="${TARGET_DIR/%\//}/"
 COMPLETE_TARGET_DIR="${TARGET_DIR_PATH}${TIMESTAMP}"
 INCOMPLETE_TARGET_DIR="${TARGET_DIR_PATH}incomplete"
 CURRENT_TARGET_DIR="${TARGET_DIR_PATH}current"
