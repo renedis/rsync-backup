@@ -5,8 +5,13 @@ RUN set -x \
     && apk add --no-cache \
         bash \
         openssh-client \
-        rsync
+        rsync \
+    && adduser -D backupuser
 
 COPY container/ /
+RUN chmod +x /usr/local/bin/disk-backup.sh \
+    chmod +x /usr/local/bin/disk-cleanup.sh
 
-CMD [ "disk-backup.sh" ]
+USER backupuser
+
+CMD ["disk-backup.sh"]
