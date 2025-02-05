@@ -31,15 +31,16 @@ if [[ "${SOURCE_DIR}" == /* ]] && [[ ! -d "${SOURCE_DIR}" ]]; then
   exit 1
 fi
 
-TIMESTAMP="$(date +%H.%M_%d-%m-%Y)"
-TARGET_DIR_PATH="${TARGET_DIR/%\//}/"
-COMPLETE_TARGET_DIR="${TARGET_DIR_PATH}${TIMESTAMP}"
-INCOMPLETE_TARGET_DIR="${TARGET_DIR_PATH}incomplete"
-CURRENT_TARGET_DIR="${TARGET_DIR_PATH}current"
+TIMESTAMP="$(date +%d-%m-%Y-%H.%M)"
+TARGET_DIR_PATH="${TARGET_DIR/%\//}"
+COMPLETE_TARGET_DIR="${TARGET_DIR_PATH}.backup_${TIMESTAMP}"
+INCOMPLETE_TARGET_DIR="${TARGET_DIR_PATH}.incomplete"
+CURRENT_TARGET_DIR="${TARGET_DIR_PATH}.current"
 
+# this is not targeted as a reusable container
 SSH_KEYFILE=""
 SSH_KEYFILE_TMP=
-
+# shellcheck disable=SC2174
 mkdir -p --mode=0700 /tmp/ssh-temp
 if [[ -r /mnt/id_rsa ]] && [[ -r /mnt/id_rsa.pub ]]; then
   SSH_KEYFILE_TMP="$(mktemp /tmp/ssh-temp/ssh.id_rsa.XXXXXX)"
@@ -91,6 +92,7 @@ function cleanup() {
 }
 trap cleanup EXIT
 
+# shellcheck disable=SC2191,SC2206
 RSYNC_ARGS=(
   -avh
   --archive
@@ -105,7 +107,8 @@ RSYNC_ARGS=(
   --stats
   --progress
   --modify-window
-#  --rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEYFILE} ${SSH_OPTIONS:-}"
+  #-F # --filter='dir-merge /.rsync-filter' repeated: --filter='- .rsync-filter'
+  #--rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEYFILE} ${SSH_OPTIONS:-}"
   --link-dest="${CURRENT_TARGET_DIR}/"
   ${RSYNC_OPTIONS:-}
   "${SOURCE_DIR/%\//}/"
@@ -113,7 +116,7 @@ RSYNC_ARGS=(
 )
 
 # 1. Copy over all files
-# 2. only when successful, move the incomplete path to a completed path
+# 2. only when successful, move he incomplete path to a completed path
 # 3. delete the quick reference symlink the most recent backup
 # 4. make a new reference to the latest backup
 # 5. make sure this folder's last modified time is now!
@@ -134,6 +137,5 @@ fi
 # run max age if requested
 if [[ ${RSYNC_EXIT_CODE} -eq 0 ]] && [[ ${MAX_AGE} ]]; then
   echo "Backup completed. Starting retention clean up of $MAX_AGE days."
-  sleep 2
   disk-cleanup.sh
 fi
