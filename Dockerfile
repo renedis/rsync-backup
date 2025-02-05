@@ -6,12 +6,7 @@ RUN set -x \
         bash \
         openssh-client \
         rsync \
-    && adduser -D backupuser
 
 COPY container/ /
-RUN chmod +x /usr/local/bin/disk-backup.sh \
-    && chmod +x /usr/local/bin/disk-cleanup.sh
-
-USER backupuser
 
 CMD ["disk-backup.sh"]
