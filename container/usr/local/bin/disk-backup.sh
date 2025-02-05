@@ -1,4 +1,7 @@
 #!/bin/bash
+
+export TZ="${TZ:-UTC}"
+
 set -euo pipefail
 
 if [[ -n ${VERBOSE:-} ]]; then
@@ -29,8 +32,8 @@ if [[ "${SOURCE_DIR}" == /* ]] && [[ ! -d "${SOURCE_DIR}" ]]; then
 fi
 
 TIMESTAMP="$(date +%H.%M_%d-%m-%Y)"
-TARGET_DIR_PATH="${TARGET_DIR/%\//}/daily"
-COMPLETE_TARGET_DIR="${TARGET_DIR_PATH}.backup_${TIMESTAMP}"
+TARGET_DIR_PATH="${TARGET_DIR/%\//}/"
+COMPLETE_TARGET_DIR="${TARGET_DIR_PATH}${TIMESTAMP}"
 INCOMPLETE_TARGET_DIR="${TARGET_DIR_PATH}.incomplete"
 CURRENT_TARGET_DIR="${TARGET_DIR_PATH}.current"
 
@@ -103,6 +106,7 @@ RSYNC_ARGS=(
   --verbose
   --stats
   --progress
+  --modify-window
   -F # --filter='dir-merge /.rsync-filter' repeated: --filter='- .rsync-filter'
   --rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEYFILE} ${SSH_OPTIONS:-}"
   --link-dest="${CURRENT_TARGET_DIR}/"
@@ -133,5 +137,6 @@ fi
 # run max age if requested
 if [[ ${RSYNC_EXIT_CODE} -eq 0 ]] && [[ ${MAX_AGE} ]]; then
   echo "Backup completed. Starting retention clean up of $MAX_AGE days."
+  sleep 2
   disk-cleanup.sh
 fi
