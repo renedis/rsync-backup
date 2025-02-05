@@ -5,8 +5,13 @@ RUN set -x \
     && apk add --no-cache \
         bash \
         openssh-client \
-        rsync
+        rsync \
+        tzdata
 
 COPY container/ /
 
-CMD [ "disk-backup.sh" ]
+ENV TZ=UTC
+
+CMD sh -c "ln -sf \"/usr/share/zoneinfo/\$${TZ}\" /etc/localtime \
+  && echo \$${TZ} > /etc/timezone \
+  && exec /disk-backup.sh"
