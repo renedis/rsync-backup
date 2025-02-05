@@ -21,7 +21,7 @@ TARGET_DIR_PATH="${TARGET_DIR/%\//}"
 FIND_ARGS=(
   "${TARGET_DIR_PATH}"
   -maxdepth 1
-  -iname 'daily.*'
+  -iname '*'
   -mtime "+${MAX_AGE}"
   -type d
 )
@@ -29,15 +29,17 @@ FIND_ARGS=(
 # If there's no files to delete, that's ok
 if ! (find "${FIND_ARGS[@]}" \
   | grep -v incomplete \
-  | grep -q -v "$(basename "$(readlink "${TARGET_DIR_PATH}/daily.current")")"); then
+  | grep -q -v "$(basename "$(readlink "${TARGET_DIR_PATH}/current")")"); then
   echo "No files to delete older then $MAX_AGE days."
+  sleep 2
+  echo "All done. Exiting now."
   exit 0
 fi
 
 # print found files for logging
 find "${FIND_ARGS[@]}" \
   | grep -v incomplete \
-  | grep -v "$(basename "$(readlink "${TARGET_DIR_PATH}/daily.current")")" \
+  | grep -v "$(basename "$(readlink "${TARGET_DIR_PATH}/current")")" \
   | sort
 
 # 1. Find all old backups
@@ -46,7 +48,9 @@ find "${FIND_ARGS[@]}" \
 # 4. remove found backups
 find "${FIND_ARGS[@]}" \
   | grep -v incomplete \
-  | grep -v "$(basename "$(readlink "${TARGET_DIR_PATH}/daily.current")")" \
+  | grep -v "$(basename "$(readlink "${TARGET_DIR_PATH}/current")")" \
   | sort \
   | xargs -t -r rm -rf
   echo "Files found to delete older then $MAX_AGE days. They are now deleted."
+  sleep 2
+  echo "All done. Exiting now."
