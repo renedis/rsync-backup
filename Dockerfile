@@ -5,8 +5,8 @@ RUN set -x \
     && apk add --no-cache \
         bash \
         openssh-client \
-        rsync \
+        rsync
 
 COPY container/ /
 
-CMD ["disk-backup.sh"]
+CMD [ "disk-backup.sh" ]
