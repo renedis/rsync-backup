@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export TZ="${TZ:-UTC}"
-
 set -euo pipefail
 
 if [[ -n ${VERBOSE:-} ]]; then
