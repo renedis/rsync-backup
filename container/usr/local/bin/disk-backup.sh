@@ -92,7 +92,6 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-# shellcheck disable=SC2191,SC2206
 RSYNC_ARGS=(
   -avh
   --archive
@@ -106,7 +105,7 @@ RSYNC_ARGS=(
   --verbose
   --stats
   --progress
-  --modify-window
+  #--modify-window
   #-F # --filter='dir-merge /.rsync-filter' repeated: --filter='- .rsync-filter'
   #--rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEYFILE} ${SSH_OPTIONS:-}"
   --link-dest="${CURRENT_TARGET_DIR}/"
