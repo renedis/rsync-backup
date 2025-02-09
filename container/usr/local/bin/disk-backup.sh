@@ -89,10 +89,9 @@ function cleanup() {
 trap cleanup EXIT
 
 RSYNC_ARGS=(
-  -avh
-  --archive
-  --one-file-system
-  --hard-links
+  --recursive
+  --perms --chmod=a+rwx 
+  --log-file=/dev/stdout
   --human-readable
   --inplace
   --numeric-ids
@@ -101,9 +100,8 @@ RSYNC_ARGS=(
   --verbose
   --stats
   --progress
-  #--modify-window
   #-F # --filter='dir-merge /.rsync-filter' repeated: --filter='- .rsync-filter'
-  #--rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEYFILE} ${SSH_OPTIONS:-}"
+  #--rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEY>
   --link-dest="${CURRENT_TARGET_DIR}/"
   ${RSYNC_OPTIONS:-}
   "${SOURCE_DIR/%\//}/"
