@@ -92,6 +92,9 @@ trap cleanup EXIT
 
 RSYNC_ARGS=(
   -avh
+  --recursive
+  --relative
+  --hard-links
   --archive
   --one-file-system
   --hard-links
