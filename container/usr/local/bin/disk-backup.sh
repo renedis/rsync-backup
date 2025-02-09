@@ -91,7 +91,7 @@ function cleanup() {
 trap cleanup EXIT
 
 RSYNC_ARGS=(
-  #-avh
+  -avh
   --recursive
   #--relative
   --archive
