@@ -95,12 +95,12 @@ RSYNC_ARGS=(
   --recursive
   #--relative
   --archive
-  #--one-file-system
+  --one-file-system
   --hard-links
   --human-readable
-  #--inplace
-  #--numeric-ids
-  #--delete
+  --inplace
+  --numeric-ids
+  --delete
   --ignore-errors
   --verbose
   --stats
