@@ -91,17 +91,16 @@ function cleanup() {
 trap cleanup EXIT
 
 RSYNC_ARGS=(
-  -avh
+  #-avh
   --recursive
-  --relative
-  --hard-links
+  #--relative
   --archive
-  --one-file-system
+  #--one-file-system
   --hard-links
   --human-readable
-  --inplace
-  --numeric-ids
-  --delete
+  #--inplace
+  #--numeric-ids
+  #--delete
   --ignore-errors
   --verbose
   --stats
@@ -111,7 +110,7 @@ RSYNC_ARGS=(
   #--rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEYFILE} ${SSH_OPTIONS:-}"
   --link-dest="${CURRENT_TARGET_DIR}/"
   ${RSYNC_OPTIONS:-}
-  "${SOURCE_DIR/%\//}/"
+  "${SOURCE_DIR/%\//}"
   "${INCOMPLETE_TARGET_DIR}/"
 )
 
