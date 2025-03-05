@@ -6,6 +6,7 @@ fi
 
 # run max age if requested
 MAX_AGE="${MAX_AGE:-}"
+EXCLUDE_FILE="${EXCLUDE_FILE:-}"
 TARGET_DIR="${TARGET_DIR:-}"
 SOURCE_DIR="${SOURCE_DIR:-}"
 if [[ -z "${TARGET_DIR}" ]]; then
@@ -88,10 +89,10 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-RSYNC_EXCLUDES=()
-for pattern in ${EXCLUDE}; do
-    RSYNC_EXCLUDES+=(--exclude="$pattern")
-done
+#RSYNC_EXCLUDES=()
+#for pattern in ${EXCLUDE}; do
+#    RSYNC_EXCLUDES+=(--exclude="$pattern")
+#done
 
 RSYNC_ARGS=(
   --recursive
@@ -105,7 +106,8 @@ RSYNC_ARGS=(
   --verbose
   --stats
   --progress
-  ${RSYNC_EXCLUDES[@]}
+  --exclude-from=${EXCLUDE_FILE}
+  #${RSYNC_EXCLUDES[@]}
   #-F # --filter='dir-merge /.rsync-filter' repeated: --filter='- .rsync-filter'
   #--rsh="ssh -p ${SSH_PORT:-22} ${SSH_LOGGING_LEVEL} -o ConnectTimeout=${SSH_CONNECT_TIMEOUT:-5} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${SSH_KEY>
   --link-dest="${CURRENT_TARGET_DIR}/"
