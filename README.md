@@ -1,8 +1,15 @@
-# rsync-backup: Containerized Daily Backup Solution
+<table style="border-collapse: collapse;">
+  <tr>
+    <td style="border: none; padding: 0; vertical-align: middle;" width="160">
+      <img src="https://raw.githubusercontent.com/renedis/rsync-backup/refs/heads/master/rsync-backup-logo.png" alt="rsync-backup logo" width="150" />
+    </td>
+    <td style="border: none; padding-left: 15px; vertical-align: middle;">
+      <h1>rsync-backup: Containerized Daily Backup Solution</h1>
+      <p>A lightweight, versatile container designed for daily backups using <code>rsync</code>. Supports local and remote directory synchronization with configurable retention policies and logging.</p>
+    </td>
+  </tr>
+</table>
 
-A lightweight, versatile container designed for daily backups using `rsync`. Supports local and remote directory synchronization with configurable retention policies and logging.
-
----
 
 ## Overview
 
